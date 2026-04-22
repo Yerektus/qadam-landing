@@ -1,0 +1,32 @@
+---
+import BenefitCard from "./benefit-card.astro"
+
+const benefits = [
+  {
+    title: "Ускоряйте результат",
+    description: "Переходите от черновика к готовому документу быстрее",
+    imageSrc: "/content-paper-edit.svg",
+  },
+  {
+    title: "Повышайте качество",
+    description: "Делайте документы понятнее, точнее и сильнее",
+    imageSrc: "/focus-frame-target.svg",
+  },
+  {
+    title: "Снижайте риски",
+    description: "Находите ошибки до отправки документа",
+    imageSrc: "/vinyl-record-gramophone.svg",
+  },
+]
+---
+
+<section
+  class="m-auto mb-20 w-full max-w-6xl p-10"
+>
+  <h2 class="mb-12 text-center font-heading text-3xl">
+    Уделяйте время клиентам, а не рутине
+  </h2>
+  <div class="w-full grid grid-cols-3 gap-8 align-center">
+    {benefits.map((benefit) => <BenefitCard {...benefit} />)}
+  </div>
+</section>

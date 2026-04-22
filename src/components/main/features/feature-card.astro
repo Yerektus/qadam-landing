@@ -1,0 +1,25 @@
+---
+const {
+    title,
+    description,
+    imageUrl
+} = Astro.props
+---
+
+
+<article class="w-full flex gap-10 items-center justify-between">
+    <div>
+        <h3 class="mb-3 text-xl">
+            {title}
+        </h3>
+        <p class="text-muted-foreground text-md font-normal">
+            {description}
+        </p>
+    </div>
+    <div class="ml-auto max-w-lg aspect-square rounded-xl overflow-hidden">
+        <img
+            src={imageUrl}
+            class="h-full w-full object-cover"
+        />
+    </div>
+</article>

@@ -1,4 +1,6 @@
 ---
+import Nav from "@/components/nav/nav"
+import { Toaster } from "@/components/ui/sonner"
 import "@/styles/global.css"
 ---
 
@@ -10,6 +12,8 @@ import "@/styles/global.css"
     <title>Astro App</title>
   </head>
   <body>
+    <Nav />
     <slot />
+    <Toaster client:load />
   </body>
 </html>
