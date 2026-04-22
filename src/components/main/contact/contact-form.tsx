@@ -90,7 +90,7 @@ export default function ContactForm() {
       <CardContent>
         <form id="contact-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <div className="grid gap-7 lg:flex">
+            <div className="grid gap-7 md:flex md:gap-5">
               <Controller
                 name="lastname"
                 control={form.control}

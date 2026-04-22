@@ -23,10 +23,10 @@ const benefits = [
 <section
   class="m-auto mb-20 w-full max-w-6xl p-10"
 >
-  <h2 class="mb-12 text-center font-heading lg:text-3xl text-2xl">
+  <h2 class="mb-12 text-center font-heading text-2xl lg:text-3xl">
     Уделяйте время клиентам, а не рутине
   </h2>
-  <div class="w-full grid lg:grid-cols-3 grid-cols-1 gap-8 align-center">
+  <div class="w-full grid grid-cols-1 gap-8 align-center md:grid-cols-3">
     {benefits.map((benefit) => <BenefitCard {...benefit} />)}
   </div>
 </section>

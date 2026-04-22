@@ -7,16 +7,16 @@ const {
 ---
 
 
-<article class="w-full grid grid-cols-1 lg:gap-15 gap-8 items-center justify-between lg:grid-cols-2">
+<article class="w-full grid grid-cols-1 gap-8 items-center justify-between md:grid-cols-2 md:gap-10 lg:gap-16">
     <div>
-        <h3 class="lg:mb-3 mb-1 lg:text-xl text-lg">
+        <h3 class="mb-1 text-lg sm:mb-2 lg:mb-3 lg:text-xl">
             {title}
         </h3>
-        <p class="text-muted-foreground lg:text-md lg:text-sm font-normal">
+        <p class="text-muted-foreground font-normal lg:text-md lg:text-sm">
             {description}
         </p>
     </div>
-    <div class="ml-auto max-w-lg aspect-square rounded-xl overflow-hidden">
+    <div class="ml-auto aspect-square rounded-xl overflow-hidden">
         <img
             src={imageUrl}
             class="h-full w-full object-cover"
