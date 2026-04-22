@@ -50,8 +50,9 @@ const formSchema = z.object({
   source: z.string().min(1, "Пожалуйста, укажите, откуда вы о нас узнали."),
 })
 
-const contactInputClassName = "bg-white"
-const contactLabelClassName = "font-normal"
+const contactInputClassName = "bg-white text-sm"
+const contactLabelClassName = "font-normal text-sm"
+const contactFieldClassName = "gap-2"
 
 export default function ContactForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -89,12 +90,12 @@ export default function ContactForm() {
       <CardContent>
         <form id="contact-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <div className="flex gap-4">
+            <div className="grid gap-7 lg:flex">
               <Controller
                 name="lastname"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
+                  <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                     <FieldLabel className={contactLabelClassName} htmlFor="contact-form-lastname">
                       Фамилия
                     </FieldLabel>
@@ -116,7 +117,7 @@ export default function ContactForm() {
                 name="firstname"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
+                  <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                     <FieldLabel className={contactLabelClassName} htmlFor="contact-form-firstname">
                       Имя
                     </FieldLabel>
@@ -139,7 +140,7 @@ export default function ContactForm() {
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                   <FieldLabel className={contactLabelClassName} htmlFor="contact-form-email">Почта</FieldLabel>
                   <Input
                     {...field}
@@ -159,7 +160,7 @@ export default function ContactForm() {
               name="company"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                   <FieldLabel className={contactLabelClassName} htmlFor="contact-form-company">
                     Компания
                   </FieldLabel>
@@ -181,7 +182,7 @@ export default function ContactForm() {
               name="city"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                   <FieldLabel className={contactLabelClassName} htmlFor="contact-form-city">Город</FieldLabel>
                   <Input
                     {...field}
@@ -201,7 +202,7 @@ export default function ContactForm() {
               name="organizationType"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                   <FieldLabel className={contactLabelClassName} htmlFor="contact-form-organization-type">
                     Тип организации
                   </FieldLabel>
@@ -223,7 +224,7 @@ export default function ContactForm() {
               name="source"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
                   <FieldLabel className={contactLabelClassName} htmlFor="contact-form-source">
                     Откуда вы о нас узнали?
                   </FieldLabel>
