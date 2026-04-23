@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets"
+
 const {
     title,
     description,
@@ -8,7 +10,13 @@ const {
 
 <article class="flex flex-col items-center lg:gap-8 gap-5 rounded-sm bg-neutral-100 px-6 py-20">
     <div class="size-12">
-        <img class="h-full w-full" src={imageSrc} alt="" />
+        <Image 
+        class="h-full w-full" 
+        src={imageSrc} 
+        alt={`${title} icon`} 
+        width={48}
+        height={48} 
+        />
     </div>
     <div class="text-center">
         <h3 class="lg:mb-5 mb-3 lg:text-xl text-lg">{title}</h3>

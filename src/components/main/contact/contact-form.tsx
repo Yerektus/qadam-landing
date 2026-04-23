@@ -15,6 +15,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { Toaster } from "@/components/ui/sonner"
 import { createLead } from "@/lib/api/requests/create-lead.request"
 
 const formSchema = z.object({
@@ -72,10 +73,12 @@ export default function ContactForm() {
   }
 
   return (
-    <Card className="w-full max-w-xl rounded-sm border-0 bg-[linear-gradient(135deg,#d7e6e7_0%,#eef4ef_52%,#d3e1e0_100%)] shadow-none ring-0">
-      <CardContent>
-        <form id="contact-form" onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
+    <>
+      <Toaster />
+      <Card className="w-full max-w-xl rounded-sm border-0 bg-[linear-gradient(135deg,#d7e6e7_0%,#eef4ef_52%,#d3e1e0_100%)] shadow-none ring-0">
+        <CardContent>
+          <form id="contact-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
             <div className="grid gap-7 md:flex md:gap-5">
               <Controller
                 name="lastname"
@@ -274,16 +277,17 @@ export default function ContactForm() {
                 </Field>
               )}
             />
-          </FieldGroup>
-        </form>
-      </CardContent>
-      <CardFooter>
-        <Field orientation="horizontal" className="flex justify-center">
-          <Button type="submit" className="px-10" form="contact-form">
-            Попробовать демо
-          </Button>
-        </Field>
-      </CardFooter>
-    </Card>
+            </FieldGroup>
+          </form>
+        </CardContent>
+        <CardFooter>
+          <Field orientation="horizontal" className="flex justify-center">
+            <Button type="submit" className="px-10" form="contact-form">
+              Попробовать демо
+            </Button>
+          </Field>
+        </CardFooter>
+      </Card>
+    </>
   )
 }

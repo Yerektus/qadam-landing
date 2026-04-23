@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 const {
     title,
     description,
@@ -17,9 +19,13 @@ const {
         </p>
     </div>
     <div class="ml-auto aspect-square rounded-xl overflow-hidden">
-        <img
+        <Image
             src={imageUrl}
             class="h-full w-full object-cover"
+            alt={`${title} illustration`}
+            width={1200}
+            height={900}
+            format="webp"   
         />
     </div>
 </article>
