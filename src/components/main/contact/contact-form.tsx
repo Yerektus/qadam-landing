@@ -7,13 +7,7 @@ import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import {
   Field,
   FieldError,
@@ -21,12 +15,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group"
+import { createLead } from "@/lib/api/requests/create-lead.request"
 
 const formSchema = z.object({
   firstname: z
@@ -68,25 +57,22 @@ export default function ContactForm() {
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast.info("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    await createLead({
+      first_name: data.firstname,
+      last_name: data.lastname,
+      email: data.email,
+      company: data.company,
+      city: data.city,
+      organization_type: data.organizationType,
+      source: data.source,
     })
+
+    toast.info("Форма была отправлена")
   }
 
   return (
-    <Card className="w-full max-w-xl rounded-sm border-0 bg-[linear-gradient(135deg,#d7e6e7_0%,#eef4ef_52%,#d3e1e0_100%)] ring-0 shadow-none">
+    <Card className="w-full max-w-xl rounded-sm border-0 bg-[linear-gradient(135deg,#d7e6e7_0%,#eef4ef_52%,#d3e1e0_100%)] shadow-none ring-0">
       <CardContent>
         <form id="contact-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
@@ -95,8 +81,14 @@ export default function ContactForm() {
                 name="lastname"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                    <FieldLabel className={contactLabelClassName} htmlFor="contact-form-lastname">
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className={contactFieldClassName}
+                  >
+                    <FieldLabel
+                      className={contactLabelClassName}
+                      htmlFor="contact-form-lastname"
+                    >
                       Фамилия
                     </FieldLabel>
                     <Input
@@ -117,8 +109,14 @@ export default function ContactForm() {
                 name="firstname"
                 control={form.control}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                    <FieldLabel className={contactLabelClassName} htmlFor="contact-form-firstname">
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className={contactFieldClassName}
+                  >
+                    <FieldLabel
+                      className={contactLabelClassName}
+                      htmlFor="contact-form-firstname"
+                    >
                       Имя
                     </FieldLabel>
                     <Input
@@ -140,8 +138,16 @@ export default function ContactForm() {
               name="email"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                  <FieldLabel className={contactLabelClassName} htmlFor="contact-form-email">Почта</FieldLabel>
+                <Field
+                  data-invalid={fieldState.invalid}
+                  className={contactFieldClassName}
+                >
+                  <FieldLabel
+                    className={contactLabelClassName}
+                    htmlFor="contact-form-email"
+                  >
+                    Почта
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="contact-form-email"
@@ -160,8 +166,14 @@ export default function ContactForm() {
               name="company"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                  <FieldLabel className={contactLabelClassName} htmlFor="contact-form-company">
+                <Field
+                  data-invalid={fieldState.invalid}
+                  className={contactFieldClassName}
+                >
+                  <FieldLabel
+                    className={contactLabelClassName}
+                    htmlFor="contact-form-company"
+                  >
                     Компания
                   </FieldLabel>
                   <Input
@@ -182,8 +194,16 @@ export default function ContactForm() {
               name="city"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                  <FieldLabel className={contactLabelClassName} htmlFor="contact-form-city">Город</FieldLabel>
+                <Field
+                  data-invalid={fieldState.invalid}
+                  className={contactFieldClassName}
+                >
+                  <FieldLabel
+                    className={contactLabelClassName}
+                    htmlFor="contact-form-city"
+                  >
+                    Город
+                  </FieldLabel>
                   <Input
                     {...field}
                     id="contact-form-city"
@@ -202,8 +222,14 @@ export default function ContactForm() {
               name="organizationType"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                  <FieldLabel className={contactLabelClassName} htmlFor="contact-form-organization-type">
+                <Field
+                  data-invalid={fieldState.invalid}
+                  className={contactFieldClassName}
+                >
+                  <FieldLabel
+                    className={contactLabelClassName}
+                    htmlFor="contact-form-organization-type"
+                  >
                     Тип организации
                   </FieldLabel>
                   <Input
@@ -224,8 +250,14 @@ export default function ContactForm() {
               name="source"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className={contactFieldClassName}>
-                  <FieldLabel className={contactLabelClassName} htmlFor="contact-form-source">
+                <Field
+                  data-invalid={fieldState.invalid}
+                  className={contactFieldClassName}
+                >
+                  <FieldLabel
+                    className={contactLabelClassName}
+                    htmlFor="contact-form-source"
+                  >
                     Откуда вы о нас узнали?
                   </FieldLabel>
                   <Input
