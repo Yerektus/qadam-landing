@@ -311,8 +311,8 @@ export default function ContactForm() {
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal" className="flex justify-center">
-            <Button type="submit" className="px-10" form="contact-form" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Отправка..." : "Попробовать демо"}
+            <Button type="submit" className="px-10" form="contact-form" loading={form.formState.isSubmitting}>
+              Попробовать демо
             </Button>
           </Field>
         </CardFooter>
