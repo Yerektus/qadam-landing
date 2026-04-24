@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Toaster } from "@/components/ui/sonner"
 import { createLead } from "@/lib/api/requests/create-lead.request"
+import axios from "axios"
 
 const formSchema = z.object({
   firstname: z
@@ -44,6 +45,27 @@ const contactInputClassName = "bg-white text-sm"
 const contactLabelClassName = "font-normal text-sm"
 const contactFieldClassName = "gap-2"
 
+function getSubmitErrorMessage(error: unknown) {
+  if (axios.isAxiosError(error)) {
+    if (!error.response) {
+      return "Не удалось подключиться к серверу. Проверьте интернет и попробуйте снова."
+    }
+
+    if (error.response.status >= 500) {
+      return "Сервер временно недоступен. Попробуйте позже."
+    }
+
+    console.log(error.response.data)
+    const message = error.response.data?.message
+    if (typeof message === "string") {
+      // todo(yerektus): create check error message
+      return message
+    }
+
+    return "Не удалось отправить форму. Попробуйте еще раз."
+  }
+}
+
 export default function ContactForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,17 +81,24 @@ export default function ContactForm() {
   })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await createLead({
-      first_name: data.firstname,
-      last_name: data.lastname,
-      email: data.email,
-      company: data.company,
-      city: data.city,
-      organization_type: data.organizationType,
-      source: data.source,
-    })
+    try {
+      await createLead({
+        first_name: data.firstname,
+        last_name: data.lastname,
+        email: data.email,
+        company: data.company,
+        city: data.city,
+        organization_type: data.organizationType,
+        source: data.source,
+      })
 
-    toast.info("Форма была отправлена")
+      form.reset()
+      toast.info("Форма была отправлена")
+    } catch (error) {
+      const message = getSubmitErrorMessage(error)
+
+      toast.error(message)
+    }
   }
 
   return (
@@ -79,9 +108,66 @@ export default function ContactForm() {
         <CardContent>
           <form id="contact-form" onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
-            <div className="grid gap-7 md:flex md:gap-5">
+              <div className="grid gap-7 md:flex md:gap-5">
+                <Controller
+                  name="lastname"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className={contactFieldClassName}
+                    >
+                      <FieldLabel
+                        className={contactLabelClassName}
+                        htmlFor="contact-form-lastname"
+                      >
+                        Фамилия
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="contact-form-lastname"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Иванов"
+                        autoComplete="off"
+                        className={contactInputClassName}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  name="firstname"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      data-invalid={fieldState.invalid}
+                      className={contactFieldClassName}
+                    >
+                      <FieldLabel
+                        className={contactLabelClassName}
+                        htmlFor="contact-form-firstname"
+                      >
+                        Имя
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id="contact-form-firstname"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Иван"
+                        autoComplete="off"
+                        className={contactInputClassName}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
               <Controller
-                name="lastname"
+                name="email"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field
@@ -90,15 +176,15 @@ export default function ContactForm() {
                   >
                     <FieldLabel
                       className={contactLabelClassName}
-                      htmlFor="contact-form-lastname"
+                      htmlFor="contact-form-email"
                     >
-                      Фамилия
+                      Почта
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="contact-form-lastname"
+                      id="contact-form-email"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Иванов"
+                      placeholder="ivan@example.com"
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -109,7 +195,7 @@ export default function ContactForm() {
                 )}
               />
               <Controller
-                name="firstname"
+                name="company"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field
@@ -118,15 +204,15 @@ export default function ContactForm() {
                   >
                     <FieldLabel
                       className={contactLabelClassName}
-                      htmlFor="contact-form-firstname"
+                      htmlFor="contact-form-company"
                     >
-                      Имя
+                      Компания
                     </FieldLabel>
                     <Input
                       {...field}
-                      id="contact-form-firstname"
+                      id="contact-form-company"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Иван"
+                      placeholder="ТОО Qadam"
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -136,154 +222,97 @@ export default function ContactForm() {
                   </Field>
                 )}
               />
-            </div>
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  className={contactFieldClassName}
-                >
-                  <FieldLabel
-                    className={contactLabelClassName}
-                    htmlFor="contact-form-email"
+              <Controller
+                name="city"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className={contactFieldClassName}
                   >
-                    Почта
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="contact-form-email"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="ivan@example.com"
-                    autoComplete="off"
-                    className={contactInputClassName}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="company"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  className={contactFieldClassName}
-                >
-                  <FieldLabel
-                    className={contactLabelClassName}
-                    htmlFor="contact-form-company"
+                    <FieldLabel
+                      className={contactLabelClassName}
+                      htmlFor="contact-form-city"
+                    >
+                      Город
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="contact-form-city"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Алматы"
+                      autoComplete="off"
+                      className={contactInputClassName}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="organizationType"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className={contactFieldClassName}
                   >
-                    Компания
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="contact-form-company"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="ТОО Qadam"
-                    autoComplete="off"
-                    className={contactInputClassName}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="city"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  className={contactFieldClassName}
-                >
-                  <FieldLabel
-                    className={contactLabelClassName}
-                    htmlFor="contact-form-city"
+                    <FieldLabel
+                      className={contactLabelClassName}
+                      htmlFor="contact-form-organization-type"
+                    >
+                      Тип организации
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="contact-form-organization-type"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Юридическая компания"
+                      autoComplete="off"
+                      className={contactInputClassName}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="source"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className={contactFieldClassName}
                   >
-                    Город
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="contact-form-city"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Алматы"
-                    autoComplete="off"
-                    className={contactInputClassName}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="organizationType"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  className={contactFieldClassName}
-                >
-                  <FieldLabel
-                    className={contactLabelClassName}
-                    htmlFor="contact-form-organization-type"
-                  >
-                    Тип организации
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="contact-form-organization-type"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Юридическая компания"
-                    autoComplete="off"
-                    className={contactInputClassName}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="source"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field
-                  data-invalid={fieldState.invalid}
-                  className={contactFieldClassName}
-                >
-                  <FieldLabel
-                    className={contactLabelClassName}
-                    htmlFor="contact-form-source"
-                  >
-                    Откуда вы о нас узнали?
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="contact-form-source"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="По рекомендации"
-                    autoComplete="off"
-                    className={contactInputClassName}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
+                    <FieldLabel
+                      className={contactLabelClassName}
+                      htmlFor="contact-form-source"
+                    >
+                      Откуда вы о нас узнали?
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="contact-form-source"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="По рекомендации"
+                      autoComplete="off"
+                      className={contactInputClassName}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </form>
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal" className="flex justify-center">
-            <Button type="submit" className="px-10" form="contact-form">
-              Попробовать демо
+            <Button type="submit" className="px-10" form="contact-form" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting ? "Отправка..." : "Попробовать демо"}
             </Button>
           </Field>
         </CardFooter>
