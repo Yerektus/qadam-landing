@@ -2,19 +2,24 @@
 import { buttonVariants } from "../../ui/button"
 ---
 
-<section class="flex h-screen w-full flex-col justify-center p-5 lg:p-10">
-  <div class="mb-5 text-center lg:mb-7">
-    <h1 class="mb-3 text-balance font-heading text-xl sm:text-3xl md:text-4xl lg:text-5xl lg:mb-7">
-      Инструмент, который делает <br /> вашу работу безупречной.
+<section
+  class="h-[95vh] lg:p-3"
+>
+  <div class="w-full h-full flex rounded-lg w-full bg-[url('/hero.png')] bg-cover bg-center flex-col items-start justify-center p-5 lg:p-10">
+    <div class="mb-5 lg:mb-7">
+    <h1
+      class="mb-3 font-heading text-xl text-balance sm:text-3xl md:text-4xl lg:mb-5 lg:text-5xl"
+    >
+      Инструмент, который делает <br /> работу юриста легче.
     </h1>
-    <p class="text-xs font-medium text-muted-foreground md:text-md md:text-lg">
+    <p class="md:text-md text-xs font-medium md:text-lg">
       Ваше главное технологическое преимущество
     </p>
   </div>
-  <a
-    href="#contact"
-    class={buttonVariants({ className: "self-center" })}
-  >
-    Попробовать
-  </a>
+  <div>
+    <a href="#contact" class={buttonVariants({ className: "self-center" })}>
+      Попробовать
+    </a>
+  </div>
+  </div>
 </section>
