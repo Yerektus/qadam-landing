@@ -23,9 +23,10 @@ const benefits = [
 <section
   class="m-auto mb-20 w-full max-w-6xl mt-20 p-5 lg:p-10"
 >
-  <h2 class="mb-12 text-center font-heading text-2xl lg:text-3xl">
-    Уделяйте время клиентам, а не рутине
-  </h2>
+  <div class="mb-16 text-left">
+    <h2 class="font-heading text-4xl mb-4">Преимущества QADAM</h2>
+    <p class="text-md font-normal text-wrap text-muted-foreground max-w-xl">Наш ИИ-агент - это не просто инструмент, а ваш надежный партнер в юридической практике. Он помогает юристам создавать более качественные документы, быстрее достигать результатов и снижать риски ошибок. С QADAM вы можете быть уверены, что ваши юридические проекты будут на высоте.</p>
+  </div>
   <div class="w-full grid grid-cols-1 gap-8 align-center md:grid-cols-3">
     {benefits.map((benefit) => <BenefitCard {...benefit} />)}
   </div>
