@@ -1,6 +1,9 @@
 ---
+import Footer from "@/components/main/footer/footer.astro"
 import Nav from "@/components/nav/nav"
 import "@/styles/global.css"
+
+const currentPath = Astro.url.pathname
 ---
 
 <html lang="en" class="scroll-smooth">
@@ -11,7 +14,8 @@ import "@/styles/global.css"
     <title>Astro App</title>
   </head>
   <body>
-    <Nav />
+    <Nav currentPath={currentPath} />
     <slot />
+    <Footer />
   </body>
 </html>
