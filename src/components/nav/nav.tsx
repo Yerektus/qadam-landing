@@ -4,7 +4,7 @@ const appUrl = import.meta.env.PUBLIC_APP_URL
 
 const Nav = () => {
     return (
-        <nav className="z-50 shadow-xs w-full h-12 flex justify-between items-center px-8 bg-white">
+        <nav className="z-50 fixed shadow-xs w-full h-12 flex justify-between items-center px-8 bg-white">
             <div className="font-heading text-xl">QADAM</div>
             <a href={appUrl} className={buttonVariants({ size: 'sm' })}>
                 Войти

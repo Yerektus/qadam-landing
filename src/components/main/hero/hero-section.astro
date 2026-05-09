@@ -1,25 +1,48 @@
 ---
 import { buttonVariants } from "../../ui/button"
+import { Image } from "astro:assets"
 ---
 
 <section
-  class="h-[95vh] lg:p-3"
+  class="grid grid-cols-1 px-6 py-20 sm:px-10 lg:h-screen lg:grid-cols-2 lg:items-center lg:px-[72px] lg:py-0"
 >
-  <div class="w-full h-full flex rounded-lg w-full bg-[url('/hero.png')] bg-cover bg-center flex-col items-start justify-center p-5 lg:p-10">
-    <div class="mb-5 lg:mb-7">
-    <h1
-      class="mb-3 font-heading text-xl text-balance sm:text-3xl md:text-4xl lg:mb-5 lg:text-5xl"
+  <div class="flex w-full flex-col items-center justify-center lg:items-start">
+    <div class="mb-7 max-w-[760px] text-center lg:mb-9 lg:text-left">
+      <h1
+        class="mb-5 font-heading text-2xl text-balance sm:text-3xl md:text-4xl lg:mb-6 lg:text-5xl"
+      >
+        ИИ-агент для <br class="hidden sm:block" />юридических проектов.
+      </h1>
+      <p
+        class="max-w-xl text-lg font-medium text-muted-foreground sm:text-xs md:text-xl"
+      >
+        Ваше главное технологическое преимущество
+      </p>
+    </div>
+    <div>
+      <a
+        href="#contact"
+        class={buttonVariants({ size: "lg", class: "px-8 py-5" })}
+      >
+        Попробовать
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="mt-12 flex w-full items-center justify-center lg:mt-0 lg:justify-end"
+  >
+    <div
+      class="aspect-square w-full max-w-[460px] overflow-visible sm:max-w-[540px] lg:max-w-[640px] xl:max-w-[700px]"
     >
-      Инструмент, который делает <br /> работу юриста легче.
-    </h1>
-    <p class="md:text-md text-xs font-medium md:text-lg">
-      Ваше главное технологическое преимущество
-    </p>
-  </div>
-  <div>
-    <a href="#contact" class={buttonVariants({ className: "self-center" })}>
-      Попробовать
-    </a>
-  </div>
+      <Image
+        src="/hero.png"
+        class="h-full w-full object-contain lg:translate-x-4 xl:translate-x-8"
+        alt="hero illustration"
+        width={1200}
+        height={900}
+        format="webp"
+      />
+    </div>
   </div>
 </section>
