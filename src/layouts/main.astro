@@ -3,15 +3,20 @@ import Footer from "@/components/main/footer/footer.astro"
 import Nav from "@/components/nav/nav"
 import "@/styles/global.css"
 
+type Props = {
+  title?: string
+}
+
 const currentPath = Astro.url.pathname
+const { title = "QADAM" } = Astro.props
 ---
 
-<html lang="en" class="scroll-smooth">
+<html lang="ru" class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Astro App</title>
+    <title>{title}</title>
   </head>
   <body>
     <Nav currentPath={currentPath} />

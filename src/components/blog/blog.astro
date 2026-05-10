@@ -1,0 +1,36 @@
+---
+import { blogPosts } from "@/lib/blog-posts"
+import { Image } from "astro:assets"
+---
+
+<section class="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-0 lg:py-14">
+  <header class="mb-10 flex items-center justify-between gap-6">
+    <h1 class="text-4xl sm:text-5xl">Блог QADAM</h1>
+  </header>
+
+  <div class="grid gap-x-2 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      blogPosts.map((post) => (
+        <a
+          href={`/blog/${post.slug}`}
+          class="group block"
+          aria-label={`Открыть статью: ${post.title}`}
+        >
+          <Image
+            src={post.image}
+            alt={post.title}
+            class="aspect-square w-full object-cover transition duration-150 group-hover:brightness-85"
+            width={512}
+            height={512}
+          />
+          
+          <p class="mt-2 text-sm font-light">{post.date}</p>
+
+          <h2 class="mt-2 text-lg font-normal transition group-hover:text-slate-700">
+            {post.title}
+          </h2>
+        </a>
+      ))
+    }
+  </div>
+</section>

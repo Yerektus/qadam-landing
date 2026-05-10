@@ -1,0 +1,76 @@
+---
+import Layout from "@/layouts/main.astro"
+import { blogPosts, type BlogPost } from "@/lib/blog-posts"
+
+export function getStaticPaths() {
+  return blogPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }))
+}
+
+type Props = {
+  post: BlogPost
+}
+
+const { post } = Astro.props
+---
+
+<Layout title={`${post.title} | QADAM`}>
+  <main class="pt-12">
+    <article class="w-full">
+      <div class="m-auto px-8 max-w-3xl py-12 lg:px-0 lg:py-20">
+        <a
+          href="/blog"
+          class="mb-12 inline-flex text-sm text-muted-foreground transition hover:text-foreground"
+        >
+          &larr; Блог
+        </a>
+
+        <header>
+          <p class="text-md font-normal">{post.date}</p>
+          <h1
+            class="mt-4 text-2xl font-normal text-black sm:text3xl lg:text-4xl"
+          >
+            {post.title}
+          </h1>
+          <p class="mt-4 text-sm text-muted-foreground sm:text-md">
+            {post.author}, {post.role}
+          </p>
+        </header>
+
+        <p
+          class="mt-8 text-xl leading-relaxed font-light text-black sm:text-xl"
+        >
+          {post.lead}
+        </p>
+
+        <div class="mt-8 space-y-16">
+          {
+            post.sections.map((section) => (
+              <section>
+                <h2 class="text-2xl font-normal text-black">
+                  {section.title}
+                </h2>
+
+                <div class="mt-8 space-y-8 font-light text-xl text-neutral-700">
+                  {section.paragraphs.map((paragraph) => (
+                    <p set:html={paragraph} />
+                  ))}
+                </div>
+
+                {section.items && (
+                  <ul class="mt-8 space-y-4 font-light text-xl leading-relaxed text-neutral-700">
+                    {section.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </article>
+  </main>
+</Layout>
