@@ -8,8 +8,8 @@ const {
 } = Astro.props
 ---
 
-<article class="flex flex-col items-center lg:gap-8 gap-5 rounded-sm bg-neutral-100 px-6 py-20">
-    <div class="size-12">
+<article class="flex flex-col items-left lg:gap-4 p-8 gap-5 rounded-sm border border-neutral-200">
+    <div class="size-8">
         <Image 
         class="h-full w-full" 
         src={imageSrc} 
@@ -18,8 +18,8 @@ const {
         height={48} 
         />
     </div>
-    <div class="text-center">
-        <h3 class="lg:mb-4 mb-2 lg:text-xl text-lg">{title}</h3>
+    <div class="text-left">
+        <h3 class="lg:mb-2 mb-1 lg:text-xl text-lg">{title}</h3>
         <p class="lg:text-md text-sm font-normal">{description}</p>
     </div>
 </article>
