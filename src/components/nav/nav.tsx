@@ -42,7 +42,7 @@ const Nav = ({ currentPath }: NavProps) => {
           })}
         </div>
       </div>
-      <a href={appUrl} className={buttonVariants({ size: "sm" })}>
+      <a href={appUrl} className={buttonVariants({ size: "sm", className: "!rounded-full !font-light px-4" })}>
         Войти
       </a>
     </nav>
