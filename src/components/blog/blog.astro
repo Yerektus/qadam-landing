@@ -10,7 +10,7 @@ import { Image } from "astro:assets"
 
   <div class="grid gap-x-2 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
     {
-      blogPosts.map((post) => (
+      blogPosts.map((post, index) => (
         <a
           href={`/blog/${post.slug}`}
           class="group block"
@@ -22,6 +22,11 @@ import { Image } from "astro:assets"
             class="aspect-square w-full object-cover transition duration-150 group-hover:brightness-85"
             width={512}
             height={512}
+            widths={[320, 512, 768, 1024]}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            format="webp"
+            quality={72}
+            priority={index === 0}
           />
           
           <p class="mt-2 text-sm font-light">{post.date}</p>

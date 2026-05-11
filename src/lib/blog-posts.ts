@@ -1,3 +1,13 @@
+import type { ImageMetadata } from "astro"
+
+import blogAiImage from "@/assets/blog/blog-ai.png"
+import blogAutomationImage from "@/assets/blog/blog-automation.png"
+import blogContractsImage from "@/assets/blog/blog-contracts.png"
+import blogDocumentImage from "@/assets/blog/blog-document.png"
+import blogHeroImage from "@/assets/blog/blog-hero.png"
+import blogIntegrationImage from "@/assets/blog/blog-integration.png"
+import blogTeamImage from "@/assets/blog/blog-team.png"
+
 export type BlogSection = {
   title: string
   paragraphs: string[]
@@ -8,7 +18,7 @@ export type BlogPost = {
   slug: string
   title: string
   date: string
-  image: string
+  image: ImageMetadata
   author: string
   role: string
   lead: string
@@ -20,7 +30,7 @@ export const blogPosts: BlogPost[] = [
     slug: "what-is-qadam",
     title: "Что такое QADAM и как получить максимум от юридического ИИ-агента",
     date: "09.05.2026",
-    image: "/blog-hero.png",
+    image: blogHeroImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "QADAM помогает юридическим командам быстрее готовить документы, находить ответы в материалах проекта и держать рабочий процесс под контролем.",
@@ -59,7 +69,7 @@ export const blogPosts: BlogPost[] = [
     title:
       "Как начать пользоваться QADAM без перегруза: сценарий первой недели",
     date: "09.05.2026",
-    image: "/blog-contracts.png",
+    image: blogContractsImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "Первую неделю лучше посвятить не всем возможностям сразу, а одному понятному рабочему сценарию, который команда сможет повторять.",
@@ -91,7 +101,7 @@ export const blogPosts: BlogPost[] = [
     slug: "how-to-brief-ai-agent",
     title: "Как ставить задачи ИИ-агенту и не терять контроль над результатом",
     date: "09.05.2026",
-    image: "/blog-ai.png",
+    image: blogAiImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "Качество ответа ИИ-агента зависит от того, насколько ясно задана цель, ограничения и критерии проверки результата.",
@@ -123,7 +133,7 @@ export const blogPosts: BlogPost[] = [
     slug: "legal-process-without-chaos",
     title: "Как собрать юридический процесс без хаоса в документах и переписке",
     date: "09.05.2026",
-    image: "/blog-team.png",
+    image: blogTeamImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "Когда документы, комментарии и решения живут в разных местах, юридическая команда теряет время на поиск и восстановление контекста.",
@@ -155,7 +165,7 @@ export const blogPosts: BlogPost[] = [
     slug: "documents-to-automate-first",
     title: "Какие документы стоит автоматизировать в первую очередь",
     date: "09.05.2026",
-    image: "/blog-automation.png",
+    image: blogAutomationImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "Автоматизацию стоит начинать с документов, которые часто повторяются, требуют много ручной проверки и имеют понятные критерии качества.",
@@ -187,7 +197,7 @@ export const blogPosts: BlogPost[] = [
     slug: "ai-adoption-for-legal-team",
     title: "Как юридической команде внедрять ИИ без резких изменений",
     date: "09.05.2026",
-    image: "/blog-integration.png",
+    image: blogIntegrationImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "Внедрение ИИ в юридической работе проходит спокойнее, когда команда начинает с вспомогательных задач и постепенно переносит успешные практики в общий процесс.",
@@ -219,7 +229,7 @@ export const blogPosts: BlogPost[] = [
     slug: "document-speed-and-project-outcomes",
     title: "Почему скорость подготовки документов влияет на весь проект",
     date: "09.05.2026",
-    image: "/blog-document.png",
+    image: blogDocumentImage,
     author: "Команда QADAM",
     role: "продуктовая команда",
     lead: "Документы часто становятся узким местом проекта: пока команда ждет правки, согласование или анализ, остальные решения тоже замедляются.",
