@@ -1,25 +1,23 @@
 ---
 import { Image } from "astro:assets"
 
-const {
-    title,
-    description,
-    imageSrc
-} = Astro.props
+const { title, description, imageSrc, imageAlt } = Astro.props
 ---
 
-<article class="flex flex-col items-left lg:gap-4 p-8 gap-5 rounded-sm border border-neutral-200">
-    <div class="size-8">
-        <Image 
-        class="h-full w-full" 
-        src={imageSrc} 
-        alt={`${title} icon`} 
-        width={48}
-        height={48} 
-        />
-    </div>
-    <div class="text-left">
-        <h3 class="lg:mb-2 mb-1 lg:text-xl text-lg">{title}</h3>
-        <p class="lg:text-md text-sm font-normal">{description}</p>
-    </div>
+<article
+  class="items-left flex flex-col gap-5 rounded-sm border border-neutral-200 p-8 lg:gap-4"
+>
+  <div class="size-8">
+    <Image
+      class="h-full w-full"
+      src={imageSrc}
+      alt={imageAlt ?? `${title} icon`}
+      width={48}
+      height={48}
+    />
+  </div>
+  <div class="text-left">
+    <h3 class="mb-1 text-lg lg:mb-2 lg:text-xl">{title}</h3>
+    <p class="lg:text-md text-sm font-normal">{description}</p>
+  </div>
 </article>

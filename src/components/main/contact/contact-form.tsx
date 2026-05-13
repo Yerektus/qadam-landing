@@ -15,59 +15,83 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Toaster } from "@/components/ui/sonner"
+import { type Lang } from "@/i18n/ui"
+import { getUi } from "@/i18n/utils"
 import { createLead } from "@/lib/api/requests/create-lead.request"
 import axios from "axios"
 
-const formSchema = z.object({
-  firstname: z
-    .string()
-    .min(2, "Имя должно содержать не менее 2 символов.")
-    .max(50, "Имя должно содержать не более 50 символов."),
-  lastname: z
-    .string()
-    .min(2, "Фамилия должна содержать не менее 2 символов.")
-    .max(50, "Фамилия должна содержать не более 50 символов."),
-  email: z.string().email("Неверный адрес электронной почты."),
-  company: z
-    .string()
-    .min(2, "Название компании должно содержать не менее 2 символов.")
-    .max(100, "Название компании должно содержать не более 100 символов."),
-  city: z
-    .string()
-    .min(2, "Город должен содержать не менее 2 символов.")
-    .max(100, "Город должен содержать не более 100 символов."),
-  organizationType: z.string().min(1, "Пожалуйста, выберите тип организации."),
-  source: z.string().min(1, "Пожалуйста, укажите, откуда вы о нас узнали."),
-})
+type ContactFormValues = {
+  firstname: string
+  lastname: string
+  email: string
+  company: string
+  city: string
+  organizationType: string
+  source: string
+}
+
+type ContactFormProps = {
+  lang: Lang
+}
+
+type ValidationMessages = ReturnType<typeof getUi>["contactForm"]["validation"]
+
+function createFormSchema(messages: ValidationMessages) {
+  return z.object({
+    firstname: z
+      .string()
+      .min(2, messages.firstnameMin)
+      .max(50, messages.firstnameMax),
+    lastname: z
+      .string()
+      .min(2, messages.lastnameMin)
+      .max(50, messages.lastnameMax),
+    email: z.string().email(messages.email),
+    company: z
+      .string()
+      .min(2, messages.companyMin)
+      .max(100, messages.companyMax),
+    city: z.string().min(2, messages.cityMin).max(100, messages.cityMax),
+    organizationType: z.string().min(1, messages.organizationType),
+    source: z.string().min(1, messages.source),
+  })
+}
+
+const formSchemas = {
+  ru: createFormSchema(getUi("ru").contactForm.validation),
+  en: createFormSchema(getUi("en").contactForm.validation),
+} satisfies Record<Lang, z.ZodType<ContactFormValues>>
 
 const contactInputClassName = "bg-white text-sm"
 const contactLabelClassName = "font-normal text-sm"
 const contactFieldClassName = "gap-2"
 
-function getSubmitErrorMessage(error: unknown) {
+function getSubmitErrorMessage(
+  error: unknown,
+  copy: ReturnType<typeof getUi>["contactForm"]
+) {
   if (axios.isAxiosError(error)) {
     if (!error.response) {
-      return "Не удалось подключиться к серверу. Проверьте интернет и попробуйте снова."
+      return copy.errors.network
     }
 
     if (error.response.status >= 500) {
-      return "Сервер временно недоступен. Попробуйте позже."
+      return copy.errors.server
     }
 
-    console.log(error.response.data)
     const message = error.response.data?.message
     if (typeof message === "string") {
-      // todo(yerektus): create check error message
       return message
     }
-
-    return "Не удалось отправить форму. Попробуйте еще раз."
   }
+
+  return copy.errors.submit
 }
 
-export default function ContactForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function ContactForm({ lang }: ContactFormProps) {
+  const copy = getUi(lang).contactForm
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(formSchemas[lang]),
     defaultValues: {
       firstname: "",
       lastname: "",
@@ -79,7 +103,7 @@ export default function ContactForm() {
     },
   })
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: ContactFormValues) {
     try {
       await createLead({
         first_name: data.firstname,
@@ -92,9 +116,9 @@ export default function ContactForm() {
       })
 
       form.reset()
-      toast.info("Форма была отправлена")
+      toast.info(copy.toastSuccess)
     } catch (error) {
-      const message = getSubmitErrorMessage(error)
+      const message = getSubmitErrorMessage(error, copy)
 
       toast.error(message)
     }
@@ -120,13 +144,13 @@ export default function ContactForm() {
                         className={contactLabelClassName}
                         htmlFor="contact-form-lastname"
                       >
-                        Фамилия
+                        {copy.labels.lastname}
                       </FieldLabel>
                       <Input
                         {...field}
                         id="contact-form-lastname"
                         aria-invalid={fieldState.invalid}
-                        placeholder="Иванов"
+                        placeholder={copy.placeholders.lastname}
                         autoComplete="off"
                         className={contactInputClassName}
                       />
@@ -148,13 +172,13 @@ export default function ContactForm() {
                         className={contactLabelClassName}
                         htmlFor="contact-form-firstname"
                       >
-                        Имя
+                        {copy.labels.firstname}
                       </FieldLabel>
                       <Input
                         {...field}
                         id="contact-form-firstname"
                         aria-invalid={fieldState.invalid}
-                        placeholder="Иван"
+                        placeholder={copy.placeholders.firstname}
                         autoComplete="off"
                         className={contactInputClassName}
                       />
@@ -177,13 +201,13 @@ export default function ContactForm() {
                       className={contactLabelClassName}
                       htmlFor="contact-form-email"
                     >
-                      Почта
+                      {copy.labels.email}
                     </FieldLabel>
                     <Input
                       {...field}
                       id="contact-form-email"
                       aria-invalid={fieldState.invalid}
-                      placeholder="ivan@example.com"
+                      placeholder={copy.placeholders.email}
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -205,13 +229,13 @@ export default function ContactForm() {
                       className={contactLabelClassName}
                       htmlFor="contact-form-company"
                     >
-                      Компания
+                      {copy.labels.company}
                     </FieldLabel>
                     <Input
                       {...field}
                       id="contact-form-company"
                       aria-invalid={fieldState.invalid}
-                      placeholder="ТОО Qadam"
+                      placeholder={copy.placeholders.company}
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -233,13 +257,13 @@ export default function ContactForm() {
                       className={contactLabelClassName}
                       htmlFor="contact-form-city"
                     >
-                      Город
+                      {copy.labels.city}
                     </FieldLabel>
                     <Input
                       {...field}
                       id="contact-form-city"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Алматы"
+                      placeholder={copy.placeholders.city}
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -261,13 +285,13 @@ export default function ContactForm() {
                       className={contactLabelClassName}
                       htmlFor="contact-form-organization-type"
                     >
-                      Тип организации
+                      {copy.labels.organizationType}
                     </FieldLabel>
                     <Input
                       {...field}
                       id="contact-form-organization-type"
                       aria-invalid={fieldState.invalid}
-                      placeholder="Юридическая компания"
+                      placeholder={copy.placeholders.organizationType}
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -289,13 +313,13 @@ export default function ContactForm() {
                       className={contactLabelClassName}
                       htmlFor="contact-form-source"
                     >
-                      Откуда вы о нас узнали?
+                      {copy.labels.source}
                     </FieldLabel>
                     <Input
                       {...field}
                       id="contact-form-source"
                       aria-invalid={fieldState.invalid}
-                      placeholder="По рекомендации"
+                      placeholder={copy.placeholders.source}
                       autoComplete="off"
                       className={contactInputClassName}
                     />
@@ -310,8 +334,13 @@ export default function ContactForm() {
         </CardContent>
         <CardFooter>
           <Field orientation="horizontal" className="flex justify-center">
-            <Button type="submit" className="px-10" form="contact-form" loading={form.formState.isSubmitting}>
-              Попробовать демо
+            <Button
+              type="submit"
+              className="px-10"
+              form="contact-form"
+              loading={form.formState.isSubmitting}
+            >
+              {copy.submit}
             </Button>
           </Field>
         </CardFooter>

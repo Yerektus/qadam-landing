@@ -1,11 +1,10 @@
 ---
 import Layout from "@/layouts/main.astro"
-import { defaultLang } from "@/i18n/ui"
 import { getLangFromUrl, getLocalizedPath, getUi } from "@/i18n/utils"
 import { getBlogPosts, type BlogPost } from "@/lib/blog-posts"
 
 export function getStaticPaths() {
-  return getBlogPosts(defaultLang).map((post) => ({
+  return getBlogPosts("en").map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }))

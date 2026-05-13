@@ -1,6 +1,7 @@
 ---
 import Footer from "@/components/main/footer/footer.astro"
 import Nav from "@/components/nav/nav"
+import { getLangFromUrl, getUi } from "@/i18n/utils"
 import "@/styles/global.css"
 
 type Props = {
@@ -8,10 +9,12 @@ type Props = {
 }
 
 const currentPath = Astro.url.pathname
-const { title = "QADAM" } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const { meta } = getUi(lang)
+const { title = meta.title } = Astro.props
 ---
 
-<html lang="ru" class="scroll-smooth">
+<html lang={lang} class="scroll-smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -19,7 +22,7 @@ const { title = "QADAM" } = Astro.props
     <title>{title}</title>
   </head>
   <body>
-    <Nav currentPath={currentPath} />
+    <Nav client:load currentPath={currentPath} lang={lang} />
     <slot />
     <Footer />
   </body>

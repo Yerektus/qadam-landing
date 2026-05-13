@@ -1,22 +1,26 @@
 ---
 import { buttonVariants } from "../../ui/button"
 import { Image } from "astro:assets"
+import { getLangFromUrl, getUi } from "@/i18n/utils"
+
+const lang = getLangFromUrl(Astro.url)
+const { hero } = getUi(lang).landing
 ---
 
 <section
   class="grid grid-cols-1 px-6 py-20 sm:px-10 lg:h-screen lg:grid-cols-2 lg:items-center lg:px-[72px] lg:py-0"
 >
   <div class="flex w-full flex-col items-center justify-center lg:items-start">
-    <div class="pt-10 mb-7 max-w-[760px] text-center lg:mb-9 lg:text-left">
+    <div class="mb-7 max-w-[760px] pt-10 text-center lg:mb-9 lg:text-left">
       <h1
         class="mb-2 text-2xl text-balance sm:text-3xl md:text-4xl lg:mb-6 lg:text-5xl"
       >
-        ИИ-агент для <br class="hidden sm:block" />юридических проектов.
+        {hero.title}
       </h1>
       <p
         class="max-w-xl text-lg font-medium text-muted-foreground sm:text-xs md:text-xl"
       >
-        Ваше главное технологическое преимущество
+        {hero.subtitle}
       </p>
     </div>
     <div>
@@ -24,7 +28,7 @@ import { Image } from "astro:assets"
         href="#contact"
         class={buttonVariants({ size: "lg", class: "px-8 py-5" })}
       >
-        Попробовать
+        {hero.cta}
       </a>
     </div>
   </div>
@@ -38,7 +42,7 @@ import { Image } from "astro:assets"
       <Image
         src="/hero.png"
         class="h-full w-full object-contain lg:translate-x-4 xl:translate-x-8"
-        alt="hero illustration"
+        alt={hero.imageAlt}
         width={1200}
         height={900}
         format="webp"

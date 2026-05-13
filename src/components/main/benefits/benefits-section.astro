@@ -1,33 +1,21 @@
 ---
 import BenefitCard from "./benefit-card.astro"
+import { getLangFromUrl, getUi } from "@/i18n/utils"
 
-const benefits = [
-  {
-    title: "Ускоряйте результат",
-    description: "Переходите от черновика к готовому документу быстрее",
-    imageSrc: "/content-paper-edit.svg",
-  },
-  {
-    title: "Повышайте качество",
-    description: "Делайте документы понятнее, точнее и сильнее",
-    imageSrc: "/focus-frame-target.svg",
-  },
-  {
-    title: "Снижайте риски",
-    description: "Находите ошибки до отправки документа",
-    imageSrc: "/vinyl-record-gramophone.svg",
-  },
-]
+const lang = getLangFromUrl(Astro.url)
+const { benefits } = getUi(lang).landing
 ---
 
-<section
-  class="m-auto mb-20 w-full max-w-6xl mt-20 p-5 lg:p-10"
->
+<section class="m-auto mt-20 mb-20 w-full max-w-6xl p-5 lg:p-10">
   <div class="mb-16 text-left">
-    <h2 class="text-4xl mb-4">Преимущества QADAM</h2>
-    <p class="text-md font-normal text-wrap text-muted-foreground max-w-lg">Наш ИИ-агент - это не просто инструмент, а ваш надежный партнер в юридической практике. Он помогает юристам создавать более качественные документы, быстрее достигать результатов и снижать риски ошибок. С QADAM вы можете быть уверены, что ваши юридические проекты будут на высоте.</p>
+    <h2 class="mb-4 text-4xl">{benefits.title}</h2>
+    <p class="text-md max-w-lg font-normal text-wrap text-muted-foreground">
+      {benefits.description}
+    </p>
   </div>
-  <div class="w-full grid grid-cols-1 gap-8 align-center md:grid-cols-2 lg:grid-cols-3">
-    {benefits.map((benefit) => <BenefitCard {...benefit} />)}
+  <div
+    class="align-center grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+  >
+    {benefits.items.map((benefit) => <BenefitCard {...benefit} />)}
   </div>
 </section>

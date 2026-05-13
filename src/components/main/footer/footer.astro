@@ -1,3 +1,10 @@
+---
+import { getLangFromUrl, getLocalizedPath, getUi } from "@/i18n/utils"
+
+const lang = getLangFromUrl(Astro.url)
+const { footer } = getUi(lang)
+---
+
 <footer class="relative z-10 mt-20 border-t bg-background">
   <div class="mx-auto grid gap-8 px-8 py-10 md:grid-cols-3">
     <div>
@@ -5,7 +12,7 @@
     </div>
 
     <div>
-      <h2 class="text-sm font-medium">Контакты</h2>
+      <h2 class="text-sm font-medium">{footer.contacts}</h2>
       <div class="mt-3 space-y-2 text-sm text-muted-foreground">
         <p>
           <a class="hover:text-foreground" href="tel:+77476062524">
@@ -17,20 +24,26 @@
             qop6261@gmail.com
           </a>
         </p>
-        <p>Алматы, Казахстан</p>
+        <p>{footer.city}</p>
       </div>
     </div>
 
     <div>
-      <h2 class="text-sm font-medium">Навигация</h2>
+      <h2 class="text-sm font-medium">{footer.navigation}</h2>
       <div class="mt-3 flex flex-col gap-2 text-sm text-muted-foreground">
-        <a class="hover:text-foreground" href="/">Главная</a>
-        <a class="hover:text-foreground" href="/about">О нас</a>
-        <a class="hover:text-foreground" href="/news">Новости</a>
+        <a class="hover:text-foreground" href={getLocalizedPath("/", lang)}
+          >{footer.home}</a
+        >
+        <a class="hover:text-foreground" href={getLocalizedPath("/about", lang)}
+          >{footer.about}</a
+        >
+        <a class="hover:text-foreground" href={getLocalizedPath("/blog", lang)}
+          >{footer.blog}</a
+        >
       </div>
     </div>
     <div class="py-4 text-left text-xs text-muted-foreground">
-    © {new Date().getFullYear()} QADAM. Все права защищены.
+      © {new Date().getFullYear()} QADAM. {footer.copyright}
     </div>
   </div>
 </footer>

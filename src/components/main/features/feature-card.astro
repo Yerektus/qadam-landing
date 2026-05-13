@@ -1,31 +1,28 @@
 ---
-import { Image } from "astro:assets";
+import { Image } from "astro:assets"
 
-const {
-    title,
-    description,
-    imageUrl
-} = Astro.props
+const { title, description, imageUrl, imageAlt } = Astro.props
 ---
 
-
-<article class="w-full grid grid-cols-1 gap-8 items-center justify-between md:grid-cols-2 md:gap-10 lg:gap-16">
-    <div class="max-w-sm w-full">
-        <h3 class="mb-1 text-lg sm:mb-2 lg:mb-3 lg:text-xl">
-            {title}
-        </h3>
-        <p class="text-muted-foreground font-normal lg:text-md text-sm">
-            {description}
-        </p>
-    </div>
-    <div class="ml-auto aspect-square rounded-xl overflow-hidden">
-        <Image
-            src={imageUrl}
-            class="h-full w-full object-cover"
-            alt={`${title} illustration`}
-            width={1200}
-            height={900}
-            format="webp"   
-        />
-    </div>
+<article
+  class="grid w-full grid-cols-1 items-center justify-between gap-8 md:grid-cols-2 md:gap-10 lg:gap-16"
+>
+  <div class="w-full max-w-sm">
+    <h3 class="mb-1 text-lg sm:mb-2 lg:mb-3 lg:text-xl">
+      {title}
+    </h3>
+    <p class="lg:text-md text-sm font-normal text-muted-foreground">
+      {description}
+    </p>
+  </div>
+  <div class="ml-auto aspect-square overflow-hidden rounded-xl">
+    <Image
+      src={imageUrl}
+      class="h-full w-full object-cover"
+      alt={imageAlt ?? `${title} illustration`}
+      width={1200}
+      height={900}
+      format="webp"
+    />
+  </div>
 </article>
