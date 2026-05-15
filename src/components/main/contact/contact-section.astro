@@ -1,9 +1,8 @@
 ---
 import ContactForm from "./contact-form"
-import { getLangFromUrl, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
 
-const lang = getLangFromUrl(Astro.url)
-const { contact } = getUi(lang).landing
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
 ---
 
 <section id="contact" class="pt-12">
@@ -11,9 +10,11 @@ const { contact } = getUi(lang).landing
     class="flex h-full w-full flex-col items-center justify-center gap-8 p-5 lg:p-10"
   >
     <div class="max-w-4xl md:text-center">
-      <h2 class="mb-4 text-4xl">{contact.title}</h2>
+      <h2 class="mb-4 text-4xl">
+        {m.landing_contact_title({}, { locale: lang })}
+      </h2>
       <p class="text-md font-normal text-muted-foreground">
-        {contact.description}
+        {m.landing_contact_description({}, { locale: lang })}
       </p>
     </div>
     <ContactForm client:visible lang={lang} />

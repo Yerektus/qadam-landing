@@ -1,6 +1,5 @@
 import type { ImageMetadata } from "astro"
 
-import type { Lang } from "@/i18n/ui"
 import blogAiImage from "@/assets/blog/blog-ai.png"
 import blogAutomationImage from "@/assets/blog/blog-automation.png"
 import blogContractsImage from "@/assets/blog/blog-contracts.png"
@@ -8,6 +7,8 @@ import blogDocumentImage from "@/assets/blog/blog-document.png"
 import blogHeroImage from "@/assets/blog/blog-hero.png"
 import blogIntegrationImage from "@/assets/blog/blog-integration.png"
 import blogTeamImage from "@/assets/blog/blog-team.png"
+
+type Lang = "ru" | "en"
 
 export type BlogSection = {
   title: string

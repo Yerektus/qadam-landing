@@ -1,42 +1,50 @@
 ---
-import { getLangFromUrl, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
 
-const lang = getLangFromUrl(Astro.url)
-const { about } = getUi(lang)
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
+const columnOne = [
+  m.about_column_1_paragraph_1({}, { locale: lang }),
+  m.about_column_1_paragraph_2({}, { locale: lang }),
+]
+const columnTwo = [m.about_column_2_paragraph_1({}, { locale: lang })]
 ---
 
 <section
   class="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-10 px-6 py-8 sm:px-10 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-12 lg:px-12"
 >
   <div class="lg:col-span-6">
-    <h1 class="text-2xl sm:text-5xl lg:text-5xl">{about.title}</h1>
+    <h1 class="text-2xl sm:text-5xl lg:text-5xl">
+      {m.about_title({}, { locale: lang })}
+    </h1>
 
     <aside class="mt-12 self-end sm:max-w-sm lg:col-span-4">
       <img
         src="/about-founder.png"
-        alt={about.founderAlt}
+        alt={m.about_founder_alt({}, { locale: lang })}
         class="aspect-[3/4] w-full object-cover"
         loading="eager"
         decoding="async"
       />
 
       <div class="mt-4 text-sm leading-tight">
-        <p class="font-medium">{about.founderName}</p>
-        <p class="mt-1 text-[#6b6b6b]">{about.founderRole}</p>
+        <p class="font-medium">{m.about_founder_name({}, { locale: lang })}</p>
+        <p class="mt-1 text-[#6b6b6b]">
+          {m.about_founder_role({}, { locale: lang })}
+        </p>
       </div>
     </aside>
   </div>
 
   <div class="grid grid-cols-2 gap-8 text-sm leading-6 lg:col-span-6">
     <div class="space-y-6">
-      {about.columns[0].map((paragraph) => <p>{paragraph}</p>)}
+      {columnOne.map((paragraph) => <p>{paragraph}</p>)}
     </div>
 
-    {about.columns[1].map((paragraph) => <p>{paragraph}</p>)}
+    {columnTwo.map((paragraph) => <p>{paragraph}</p>)}
     <div class="col-span-2 self-end">
       <img
         src="/about-office.png"
-        alt={about.officeAlt}
+        alt={m.about_office_alt({}, { locale: lang })}
         class="aspect-[16/9] w-full object-cover"
         loading="eager"
         decoding="async"

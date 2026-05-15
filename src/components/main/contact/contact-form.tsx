@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Toaster } from "@/components/ui/sonner"
-import { type Lang } from "@/i18n/ui"
-import { getUi } from "@/i18n/utils"
 import { createLead } from "@/lib/api/requests/create-lead.request"
+import { m } from "@/paraglide/messages.js"
 import axios from "axios"
+
+type Lang = "ru" | "en"
 
 type ContactFormValues = {
   firstname: string
@@ -34,7 +35,63 @@ type ContactFormProps = {
   lang: Lang
 }
 
-type ValidationMessages = ReturnType<typeof getUi>["contactForm"]["validation"]
+function getValidationMessages(lang: Lang) {
+  return {
+    firstnameMin: m.contact_form_validation_firstname_min({}, { locale: lang }),
+    firstnameMax: m.contact_form_validation_firstname_max({}, { locale: lang }),
+    lastnameMin: m.contact_form_validation_lastname_min({}, { locale: lang }),
+    lastnameMax: m.contact_form_validation_lastname_max({}, { locale: lang }),
+    email: m.contact_form_validation_email({}, { locale: lang }),
+    companyMin: m.contact_form_validation_company_min({}, { locale: lang }),
+    companyMax: m.contact_form_validation_company_max({}, { locale: lang }),
+    cityMin: m.contact_form_validation_city_min({}, { locale: lang }),
+    cityMax: m.contact_form_validation_city_max({}, { locale: lang }),
+    organizationType: m.contact_form_validation_organization_type(
+      {},
+      { locale: lang }
+    ),
+    source: m.contact_form_validation_source({}, { locale: lang }),
+  }
+}
+
+function getContactFormCopy(lang: Lang) {
+  return {
+    labels: {
+      lastname: m.contact_form_label_lastname({}, { locale: lang }),
+      firstname: m.contact_form_label_firstname({}, { locale: lang }),
+      email: m.contact_form_label_email({}, { locale: lang }),
+      company: m.contact_form_label_company({}, { locale: lang }),
+      city: m.contact_form_label_city({}, { locale: lang }),
+      organizationType: m.contact_form_label_organization_type(
+        {},
+        { locale: lang }
+      ),
+      source: m.contact_form_label_source({}, { locale: lang }),
+    },
+    placeholders: {
+      lastname: m.contact_form_placeholder_lastname({}, { locale: lang }),
+      firstname: m.contact_form_placeholder_firstname({}, { locale: lang }),
+      email: m.contact_form_placeholder_email({}, { locale: lang }),
+      company: m.contact_form_placeholder_company({}, { locale: lang }),
+      city: m.contact_form_placeholder_city({}, { locale: lang }),
+      organizationType: m.contact_form_placeholder_organization_type(
+        {},
+        { locale: lang }
+      ),
+      source: m.contact_form_placeholder_source({}, { locale: lang }),
+    },
+    submit: m.contact_form_submit({}, { locale: lang }),
+    toastSuccess: m.contact_form_toast_success({}, { locale: lang }),
+    errors: {
+      network: m.contact_form_error_network({}, { locale: lang }),
+      server: m.contact_form_error_server({}, { locale: lang }),
+      submit: m.contact_form_error_submit({}, { locale: lang }),
+    },
+  }
+}
+
+type ValidationMessages = ReturnType<typeof getValidationMessages>
+type ContactFormCopy = ReturnType<typeof getContactFormCopy>
 
 function createFormSchema(messages: ValidationMessages) {
   return z.object({
@@ -58,18 +115,15 @@ function createFormSchema(messages: ValidationMessages) {
 }
 
 const formSchemas = {
-  ru: createFormSchema(getUi("ru").contactForm.validation),
-  en: createFormSchema(getUi("en").contactForm.validation),
+  ru: createFormSchema(getValidationMessages("ru")),
+  en: createFormSchema(getValidationMessages("en")),
 } satisfies Record<Lang, z.ZodType<ContactFormValues>>
 
 const contactInputClassName = "bg-white text-sm"
 const contactLabelClassName = "font-normal text-sm"
 const contactFieldClassName = "gap-2"
 
-function getSubmitErrorMessage(
-  error: unknown,
-  copy: ReturnType<typeof getUi>["contactForm"]
-) {
+function getSubmitErrorMessage(error: unknown, copy: ContactFormCopy) {
   if (axios.isAxiosError(error)) {
     if (!error.response) {
       return copy.errors.network
@@ -89,7 +143,7 @@ function getSubmitErrorMessage(
 }
 
 export default function ContactForm({ lang }: ContactFormProps) {
-  const copy = getUi(lang).contactForm
+  const copy = getContactFormCopy(lang)
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(formSchemas[lang]),
     defaultValues: {

@@ -1,25 +1,27 @@
 ---
-import { getLangFromUrl, getLocalizedPath, getUi } from "@/i18n/utils"
 import { getBlogPosts } from "@/lib/blog-posts"
+import { m } from "@/paraglide/messages.js"
+import { localizeHref } from "@/paraglide/runtime.js"
 import { Image } from "astro:assets"
 
-const lang = getLangFromUrl(Astro.url)
-const { blog } = getUi(lang)
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
 const blogPosts = getBlogPosts(lang)
 ---
 
 <section class="mx-auto max-w-7xl px-6 py-10 sm:px-8 lg:px-0 lg:py-14">
   <header class="mb-10 flex items-center justify-between gap-6">
-    <h1 class="text-4xl sm:text-5xl">{blog.title}</h1>
+    <h1 class="text-4xl sm:text-5xl">
+      {m.blog_title({}, { locale: lang })}
+    </h1>
   </header>
 
   <div class="grid gap-x-2 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
     {
       blogPosts.map((post, index) => (
         <a
-          href={getLocalizedPath(`/blog/${post.slug}`, lang)}
+          href={localizeHref(`/blog/${post.slug}`, { locale: lang })}
           class="group block"
-          aria-label={`${blog.openPost}: ${post.title}`}
+          aria-label={`${m.blog_open_post({}, { locale: lang })}: ${post.title}`}
         >
           <Image
             src={post.image}

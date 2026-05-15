@@ -1,55 +1,55 @@
 import { Check, ChevronDown, Languages } from "lucide-react"
 
-import { languages, type Lang } from "@/i18n/ui"
-import { getLocalizedPath, getUi, isPathActive } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "../ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
 const appUrl = import.meta.env.PUBLIC_APP_URL
 
+type Lang = "ru" | "en"
+
 type NavProps = {
-  currentPath: string
   lang: Lang
+  navItems: {
+    href: string
+    label: string
+    active: boolean
+  }[]
+  languageOptions: {
+    code: Lang
+    label: string
+    href: string
+    selected: boolean
+  }[]
 }
 
-const Nav = ({ currentPath, lang }: NavProps) => {
-  const { nav } = getUi(lang)
-  const navItems = [
-    { href: "/", label: nav.home },
-    { href: "/about", label: nav.about },
-    { href: "/blog", label: nav.blog },
-  ]
-
+const Nav = ({ lang, navItems, languageOptions }: NavProps) => {
   return (
     <nav className="fixed z-50 flex h-12 w-full items-center justify-between gap-4 bg-white px-4 shadow-xs sm:px-8">
       <div className="flex min-w-0 items-center gap-4 sm:gap-6">
         <div className="font-heading text-lg">QADAM</div>
 
         <div className="hidden items-center gap-3 sm:flex sm:gap-4">
-          {navItems.map((item) => {
-            const isActive = isPathActive(currentPath, item.href)
-
-            return (
-              <a
-                key={item.href}
-                href={getLocalizedPath(item.href, lang)}
-                aria-current={isActive ? "page" : undefined}
-                className={cn(
-                  "text-sm text-muted-foreground transition-colors hover:text-foreground",
-                  isActive && "font-medium text-foreground"
-                )}
-              >
-                {item.label}
-              </a>
-            )
-          })}
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              aria-current={item.active ? "page" : undefined}
+              className={cn(
+                "text-sm text-muted-foreground transition-colors hover:text-foreground",
+                item.active && "font-medium text-foreground"
+              )}
+            >
+              {item.label}
+            </a>
+          ))}
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <Popover>
           <PopoverTrigger
-            aria-label={nav.selectLanguage}
+            aria-label={m.nav_select_language({}, { locale: lang })}
             className={buttonVariants({
               variant: "outline",
               size: "sm",
@@ -62,24 +62,21 @@ const Nav = ({ currentPath, lang }: NavProps) => {
           </PopoverTrigger>
           <PopoverContent align="end" className="w-44 gap-1 p-1">
             <p className="px-2 py-1 text-xs text-muted-foreground">
-              {nav.language}
+              {m.nav_language({}, { locale: lang })}
             </p>
-            {Object.entries(languages).map(([code, label]) => {
-              const optionLang = code as Lang
-              const isSelected = optionLang === lang
-
+            {languageOptions.map((option) => {
               return (
                 <a
-                  key={code}
-                  href={getLocalizedPath(currentPath, optionLang)}
-                  aria-current={isSelected ? "true" : undefined}
+                  key={option.code}
+                  href={option.href}
+                  aria-current={option.selected ? "true" : undefined}
                   className={cn(
                     "flex items-center justify-between rounded-sm px-2 py-2 text-sm transition-colors hover:bg-muted",
-                    isSelected && "font-medium"
+                    option.selected && "font-medium"
                   )}
                 >
-                  <span>{label}</span>
-                  {isSelected && (
+                  <span>{option.label}</span>
+                  {option.selected && (
                     <Check className="size-4" aria-hidden="true" />
                   )}
                 </a>
@@ -94,7 +91,7 @@ const Nav = ({ currentPath, lang }: NavProps) => {
             className: "!rounded-full px-4 !font-light",
           })}
         >
-          {nav.login}
+          {m.nav_login({}, { locale: lang })}
         </a>
       </div>
     </nav>

@@ -1,16 +1,35 @@
 ---
 import FeatureCard from "./feature-card.astro"
-import { getLangFromUrl, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
 
-const lang = getLangFromUrl(Astro.url)
-const { features } = getUi(lang).landing
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
+const features = [
+  {
+    title: m.landing_features_item_1_title({}, { locale: lang }),
+    description: m.landing_features_item_1_description({}, { locale: lang }),
+    imageUrl: m.landing_features_item_1_image_url({}, { locale: lang }),
+    imageAlt: m.landing_features_item_1_image_alt({}, { locale: lang }),
+  },
+  {
+    title: m.landing_features_item_2_title({}, { locale: lang }),
+    description: m.landing_features_item_2_description({}, { locale: lang }),
+    imageUrl: m.landing_features_item_2_image_url({}, { locale: lang }),
+    imageAlt: m.landing_features_item_2_image_alt({}, { locale: lang }),
+  },
+  {
+    title: m.landing_features_item_3_title({}, { locale: lang }),
+    description: m.landing_features_item_3_description({}, { locale: lang }),
+    imageUrl: m.landing_features_item_3_image_url({}, { locale: lang }),
+    imageAlt: m.landing_features_item_3_image_alt({}, { locale: lang }),
+  },
+]
 ---
 
 <section
   class="m-auto mb-8 flex w-full max-w-5xl flex-col gap-20 p-5 lg:gap-18 lg:p-10"
 >
   <h2 class="text-center text-2xl lg:mb-4 lg:text-3xl">
-    {features.title}
+    {m.landing_features_title({}, { locale: lang })}
   </h2>
-  {features.items.map((feature) => <FeatureCard {...feature} />)}
+  {features.map((feature) => <FeatureCard {...feature} />)}
 </section>

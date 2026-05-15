@@ -1,10 +1,9 @@
 ---
 import { buttonVariants } from "../../ui/button"
 import { Image } from "astro:assets"
-import { getLangFromUrl, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
 
-const lang = getLangFromUrl(Astro.url)
-const { hero } = getUi(lang).landing
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
 ---
 
 <section
@@ -15,12 +14,12 @@ const { hero } = getUi(lang).landing
       <h1
         class="mb-2 text-2xl text-balance sm:text-3xl md:text-4xl lg:mb-6 lg:text-5xl"
       >
-        {hero.title}
+        {m.landing_hero_title({}, { locale: lang })}
       </h1>
       <p
         class="max-w-xl text-lg font-medium text-muted-foreground sm:text-xs md:text-xl"
       >
-        {hero.subtitle}
+        {m.landing_hero_subtitle({}, { locale: lang })}
       </p>
     </div>
     <div>
@@ -28,7 +27,7 @@ const { hero } = getUi(lang).landing
         href="#contact"
         class={buttonVariants({ size: "lg", class: "px-8 py-5" })}
       >
-        {hero.cta}
+        {m.landing_hero_cta({}, { locale: lang })}
       </a>
     </div>
   </div>
@@ -42,7 +41,7 @@ const { hero } = getUi(lang).landing
       <Image
         src="/hero.png"
         class="h-full w-full object-contain lg:translate-x-4 xl:translate-x-8"
-        alt={hero.imageAlt}
+        alt={m.landing_hero_image_alt({}, { locale: lang })}
         width={1200}
         height={900}
         format="webp"

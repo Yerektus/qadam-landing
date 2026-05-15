@@ -1,17 +1,84 @@
 ---
 import Footer from "@/components/main/footer/footer.astro"
 import Nav from "@/components/nav/nav"
-import { getLangFromUrl, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
+import { localizeHref } from "@/paraglide/runtime.js"
 import "@/styles/global.css"
 
 type Props = {
   title?: string
 }
 
+type Lang = "ru" | "en"
+
+const languages = {
+  ru: "Русский",
+  en: "English",
+} as const
+
+function getLangFromPath(pathname: string): Lang {
+  return pathname.startsWith("/en") ? "en" : "ru"
+}
+
+function stripLangFromPath(pathname: string) {
+  const path = pathname.startsWith("/") ? pathname : `/${pathname}`
+
+  if (path.startsWith("/ru/") || path.startsWith("/en/")) {
+    return path.slice(3).replace(/\/$/, "") || "/"
+  }
+
+  if (path === "/ru" || path === "/en") {
+    return "/"
+  }
+
+  return path.replace(/\/$/, "") || "/"
+}
+
+function isPathActive(currentPath: string, itemPath: string) {
+  const current = stripLangFromPath(currentPath)
+  const item = stripLangFromPath(itemPath)
+
+  if (item === "/") {
+    return current === "/"
+  }
+
+  return current === item || current.startsWith(`${item}/`)
+}
+
+function getLocalizedPath(pathname: string, lang: Lang) {
+  return localizeHref(stripLangFromPath(pathname), { locale: lang })
+}
+
 const currentPath = Astro.url.pathname
-const lang = getLangFromUrl(Astro.url)
-const { meta } = getUi(lang)
-const { title = meta.title } = Astro.props
+const lang = getLangFromPath(currentPath)
+const { title = m.meta_title({}, { locale: lang }) } = Astro.props
+const navItems = [
+  {
+    href: getLocalizedPath("/", lang),
+    label: m.nav_home({}, { locale: lang }),
+    active: isPathActive(currentPath, "/"),
+  },
+  {
+    href: getLocalizedPath("/about", lang),
+    label: m.nav_about({}, { locale: lang }),
+    active: isPathActive(currentPath, "/about"),
+  },
+  {
+    href: getLocalizedPath("/blog", lang),
+    label: m.nav_blog({}, { locale: lang }),
+    active: isPathActive(currentPath, "/blog"),
+  },
+]
+const languageOptions = Object.entries(languages).map(([code, label]) => {
+  const optionLang = code as Lang
+
+  return {
+    code: optionLang,
+    label,
+    href: getLocalizedPath(currentPath, optionLang),
+    selected: optionLang === lang,
+  }
+})
 ---
 
 <html lang={lang} class="scroll-smooth">
@@ -22,7 +89,12 @@ const { title = meta.title } = Astro.props
     <title>{title}</title>
   </head>
   <body>
-    <Nav client:load currentPath={currentPath} lang={lang} />
+    <Nav
+      client:load
+      lang={lang}
+      navItems={navItems}
+      languageOptions={languageOptions}
+    />
     <slot />
     <Footer />
   </body>

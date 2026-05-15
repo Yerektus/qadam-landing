@@ -1,11 +1,11 @@
 ---
 import Layout from "@/layouts/main.astro"
-import { defaultLang } from "@/i18n/ui"
-import { getLangFromUrl, getLocalizedPath, getUi } from "@/i18n/utils"
 import { getBlogPosts, type BlogPost } from "@/lib/blog-posts"
+import { m } from "@/paraglide/messages.js"
+import { localizeHref } from "@/paraglide/runtime.js"
 
 export function getStaticPaths() {
-  return getBlogPosts(defaultLang).map((post) => ({
+  return getBlogPosts("ru").map((post) => ({
     params: { slug: post.slug },
     props: { post },
   }))
@@ -16,8 +16,7 @@ type Props = {
 }
 
 const { post } = Astro.props
-const lang = getLangFromUrl(Astro.url)
-const { blog } = getUi(lang)
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
 ---
 
 <Layout title={`${post.title} | QADAM`}>
@@ -25,10 +24,10 @@ const { blog } = getUi(lang)
     <article class="w-full">
       <div class="m-auto max-w-3xl px-8 py-12 lg:px-0 lg:py-20">
         <a
-          href={getLocalizedPath("/blog", lang)}
+          href={localizeHref("/blog", { locale: lang })}
           class="mb-12 inline-flex text-sm text-muted-foreground transition hover:text-foreground"
         >
-          &larr; {blog.backToBlog}
+          &larr; {m.blog_back_to_blog({}, { locale: lang })}
         </a>
 
         <header>
@@ -39,7 +38,9 @@ const { blog } = getUi(lang)
             {post.title}
           </h1>
           <p class="sm:text-md mt-4 text-sm text-muted-foreground">
-            {post.author}{blog.authorSeparator}{post.role}
+            {post.author}{m.blog_author_separator({}, { locale: lang })}{
+              post.role
+            }
           </p>
         </header>
 

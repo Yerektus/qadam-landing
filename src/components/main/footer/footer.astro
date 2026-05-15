@@ -1,8 +1,8 @@
 ---
-import { getLangFromUrl, getLocalizedPath, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
+import { localizeHref } from "@/paraglide/runtime.js"
 
-const lang = getLangFromUrl(Astro.url)
-const { footer } = getUi(lang)
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
 ---
 
 <footer class="relative z-10 mt-20 border-t bg-background">
@@ -12,7 +12,9 @@ const { footer } = getUi(lang)
     </div>
 
     <div>
-      <h2 class="text-sm font-medium">{footer.contacts}</h2>
+      <h2 class="text-sm font-medium">
+        {m.footer_contacts({}, { locale: lang })}
+      </h2>
       <div class="mt-3 space-y-2 text-sm text-muted-foreground">
         <p>
           <a class="hover:text-foreground" href="tel:+77476062524">
@@ -24,26 +26,36 @@ const { footer } = getUi(lang)
             qop6261@gmail.com
           </a>
         </p>
-        <p>{footer.city}</p>
+        <p>{m.footer_city({}, { locale: lang })}</p>
       </div>
     </div>
 
     <div>
-      <h2 class="text-sm font-medium">{footer.navigation}</h2>
+      <h2 class="text-sm font-medium">
+        {m.footer_navigation({}, { locale: lang })}
+      </h2>
       <div class="mt-3 flex flex-col gap-2 text-sm text-muted-foreground">
-        <a class="hover:text-foreground" href={getLocalizedPath("/", lang)}
-          >{footer.home}</a
+        <a
+          class="hover:text-foreground"
+          href={localizeHref("/", { locale: lang })}
+          >{m.footer_home({}, { locale: lang })}</a
         >
-        <a class="hover:text-foreground" href={getLocalizedPath("/about", lang)}
-          >{footer.about}</a
+        <a
+          class="hover:text-foreground"
+          href={localizeHref("/about", { locale: lang })}
+          >{m.footer_about({}, { locale: lang })}</a
         >
-        <a class="hover:text-foreground" href={getLocalizedPath("/blog", lang)}
-          >{footer.blog}</a
+        <a
+          class="hover:text-foreground"
+          href={localizeHref("/blog", { locale: lang })}
+          >{m.footer_blog({}, { locale: lang })}</a
         >
       </div>
     </div>
     <div class="py-4 text-left text-xs text-muted-foreground">
-      © {new Date().getFullYear()} QADAM. {footer.copyright}
+      © {new Date().getFullYear()} QADAM. {
+        m.footer_copyright({}, { locale: lang })
+      }
     </div>
   </div>
 </footer>

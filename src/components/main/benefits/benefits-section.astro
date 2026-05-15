@@ -1,21 +1,42 @@
 ---
 import BenefitCard from "./benefit-card.astro"
-import { getLangFromUrl, getUi } from "@/i18n/utils"
+import { m } from "@/paraglide/messages.js"
 
-const lang = getLangFromUrl(Astro.url)
-const { benefits } = getUi(lang).landing
+const lang = Astro.url.pathname.startsWith("/en") ? "en" : "ru"
+const benefits = [
+  {
+    title: m.landing_benefits_item_1_title({}, { locale: lang }),
+    description: m.landing_benefits_item_1_description({}, { locale: lang }),
+    imageSrc: m.landing_benefits_item_1_image_src({}, { locale: lang }),
+    imageAlt: m.landing_benefits_item_1_image_alt({}, { locale: lang }),
+  },
+  {
+    title: m.landing_benefits_item_2_title({}, { locale: lang }),
+    description: m.landing_benefits_item_2_description({}, { locale: lang }),
+    imageSrc: m.landing_benefits_item_2_image_src({}, { locale: lang }),
+    imageAlt: m.landing_benefits_item_2_image_alt({}, { locale: lang }),
+  },
+  {
+    title: m.landing_benefits_item_3_title({}, { locale: lang }),
+    description: m.landing_benefits_item_3_description({}, { locale: lang }),
+    imageSrc: m.landing_benefits_item_3_image_src({}, { locale: lang }),
+    imageAlt: m.landing_benefits_item_3_image_alt({}, { locale: lang }),
+  },
+]
 ---
 
 <section class="m-auto mt-20 mb-20 w-full max-w-6xl p-5 lg:p-10">
   <div class="mb-16 text-left">
-    <h2 class="mb-4 text-4xl">{benefits.title}</h2>
+    <h2 class="mb-4 text-4xl">
+      {m.landing_benefits_title({}, { locale: lang })}
+    </h2>
     <p class="text-md max-w-lg font-normal text-wrap text-muted-foreground">
-      {benefits.description}
+      {m.landing_benefits_description({}, { locale: lang })}
     </p>
   </div>
   <div
     class="align-center grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
   >
-    {benefits.items.map((benefit) => <BenefitCard {...benefit} />)}
+    {benefits.map((benefit) => <BenefitCard {...benefit} />)}
   </div>
 </section>
